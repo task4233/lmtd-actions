@@ -3,7 +3,7 @@ lmtd-actionsはlmtd用repositoryにおける各ジャンルの情報をまとめ
 
 ## Installation
 ```bash
-go install github.com/task4233/lmtd-actions/cmd/lmtd-actions
+go install github.com/task4233/lmtd-actions/cmd/lmtd-actions@latest
 ```
 
 ## Usage

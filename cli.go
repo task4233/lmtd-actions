@@ -184,7 +184,7 @@ func (l LMTd) extractDifficulty(tags []string) Difficulty {
 
 func (l LMTd) generateMarkdown(genreInfo GenreInfo) (string, error) {
 	// 追加で表示したい情報が増える可能性がありそうなので、複数ファイル指定可能にしておく
-	tpl, err := template.ParseFiles([]string{"./templates/genreInfo.md.tpl"}...)
+	tpl, err := template.ParseFiles([]string{"templates/genreInfo.md.tpl"}...)
 	if err != nil {
 		return "", err
 	}
