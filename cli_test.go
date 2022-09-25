@@ -95,27 +95,25 @@ func TestGenrateMarkdown(t *testing.T) {
 	t.Parallel()
 
 	tests := map[string]struct {
-		genreInfos   []GenreInfo
+		genreInfo    GenreInfo
 		wantMarkdown string
 		wantError    bool
 	}{
 		"generated correctly": {
-			genreInfos: []GenreInfo{
-				{
-					Name: "web",
-					ProblemInfos: []ProblemInfo{
-						{
-							Name:       "test",
-							Difficulty: "beginner",
-							Order:      1,
-							Points:     100,
-						},
-						{
-							Name:       "test2",
-							Difficulty: "easy",
-							Order:      2,
-							Points:     200,
-						},
+			genreInfo: GenreInfo{
+				Name: "web",
+				ProblemInfos: []ProblemInfo{
+					{
+						Name:       "test",
+						Difficulty: "beginner",
+						Order:      1,
+						Points:     100,
+					},
+					{
+						Name:       "test2",
+						Difficulty: "easy",
+						Order:      2,
+						Points:     200,
 					},
 				},
 			},
@@ -138,7 +136,7 @@ func TestGenrateMarkdown(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			gotMarkdown, err := lmtd.generateMarkdown(tt.genreInfos)
+			gotMarkdown, err := lmtd.generateMarkdown(tt.genreInfo)
 			if (err != nil) != tt.wantError {
 				t.Fatalf("unexpected error: %v", err)
 			}

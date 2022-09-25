@@ -29,7 +29,6 @@ func (l LMTd) Run(ctx context.Context, version string, args []string) error {
 		return err
 	}
 
-	genreInfos := make([]GenreInfo, 0, len(genres))
 	for _, genre := range genres {
 		if !genre.IsDir() {
 			continue
@@ -71,18 +70,22 @@ func (l LMTd) Run(ctx context.Context, version string, args []string) error {
 			continue
 		}
 
-		genreInfos = append(genreInfos, GenreInfo{
+		// TODO: infosからREADME.mdを生成する
+		genreInfo := GenreInfo{
 			Name:         genre.Name(),
 			ProblemInfos: problemInfos,
-		})
+		}
+		markdown, err := l.generateMarkdown(genreInfo)
+		if err != nil {
+			return fmt.Errorf("failed extractInfo: %s", err.Error())
+		}
+
+		outputPath := filepath.Join(genreDir, "README.md")
+		if err = l.appendInfo(markdown, outputPath); err != nil {
+			return fmt.Errorf("failed appendInfo: %s", err.Error())
+		}
 	}
 
-	// TODO: infosからREADME.mdを生成する
-	markdown, err := l.generateMarkdown(genreInfos)
-	if err != nil {
-		return fmt.Errorf("failed extractInfo: %s", err.Error())
-	}
-	fmt.Fprintf(l.Stdout, "markdown:\t%v\n", markdown)
 	return nil
 }
 
@@ -179,7 +182,7 @@ func (l LMTd) extractDifficulty(tags []string) Difficulty {
 	return ""
 }
 
-func (l LMTd) generateMarkdown(genreInfos []GenreInfo) (string, error) {
+func (l LMTd) generateMarkdown(genreInfo GenreInfo) (string, error) {
 	// 追加で表示したい情報が増える可能性がありそうなので、複数ファイル指定可能にしておく
 	tpl, err := template.ParseFiles([]string{"./templates/genreInfo.md.tpl"}...)
 	if err != nil {
@@ -188,13 +191,25 @@ func (l LMTd) generateMarkdown(genreInfos []GenreInfo) (string, error) {
 
 	writer := &bytes.Buffer{}
 	err = tpl.Execute(writer, struct {
-		GenreInfos []GenreInfo
+		GenreInfo GenreInfo
 	}{
-		GenreInfos: genreInfos,
+		GenreInfo: genreInfo,
 	})
 	if err != nil {
 		return "", err
 	}
 
 	return writer.String(), nil
+}
+
+func (l LMTd) appendInfo(markdown string, outputPath string) error {
+	// ファイルが存在しない時に新規作成したくない場合は、os.O_WRONLY|os.O_APPENDにする
+	file, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	_, err = fmt.Fprint(file, markdown)
+	return err
 }
