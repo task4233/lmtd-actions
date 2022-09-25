@@ -13,7 +13,7 @@ import (
 var version string
 
 func main() {
-	lmtd := lmtd.CLI{
+	lmtd := lmtd.LMTd{
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,
 	}

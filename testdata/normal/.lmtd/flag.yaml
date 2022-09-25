@@ -1,0 +1,5 @@
+---
+apiVersion: dummyApiVersion
+kind: Flag
+spec:
+  point: 100
