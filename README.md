@@ -1,16 +1,22 @@
 # lmtd-actions
 lmtd-actionsはlmtd用repositoryにおける各ジャンルの情報をまとめてmarkdownに書き出すツールです。
 
+## Installation
+```bash
+go install github.com/task4233/lmtd-actions/cmd/lmtd-actions
+```
+
 ## Usage
 ```bash
-go install github.com/task4233/lmtd-actions
-lmtd-actions ./2022_beginnersctf_ctf
+lmtd-actions <target dir>
 ```
 
 ## Example
-2022_beginners_ctfのWebジャンル
+2022_beginners_ctf
 
-```markdown
+```bash
+$ lmtd-actions 2022_beginnersctf_ctf
+$ cat web/README.md
 ## web
 
 |問題名|難易度|order|points|
