@@ -50,7 +50,7 @@ func (l LMTd) Run(ctx context.Context, version string, args []string) error {
 		problemInfos := make([]ProblemInfo, 0, len(problems))
 		for _, problem := range problems {
 			// genre用directory直下にある.lmtdはcategory.yamlしか含まれないので無視する
-			if problem.Name() == ".lmtd" {
+			if problem.Name() == ".lmtd" || problem.Name() == "README.md" {
 				continue
 			}
 
@@ -204,7 +204,7 @@ func (l LMTd) generateMarkdown(genreInfo GenreInfo) (string, error) {
 
 func (l LMTd) appendInfo(markdown string, outputPath string) error {
 	// ファイルが存在しない時に新規作成したくない場合は、os.O_WRONLY|os.O_APPENDにする
-	file, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+	file, err := os.Create(outputPath)
 	if err != nil {
 		return err
 	}
