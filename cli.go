@@ -126,6 +126,14 @@ type ProblemInfo struct {
 	Points     int
 }
 
+func (p *ProblemInfo) Validate() error {
+	if p.Points/10 != p.Order {
+		return fmt.Errorf("points(%d) should be one-tenth of order(%d)", p.Points, p.Order)
+	}
+
+	return nil
+}
+
 // GenreInfo は各ジャンルの情報を保持
 type GenreInfo struct {
 	Name         string
@@ -158,12 +166,26 @@ func (l LMTd) extractInfo(targetPath string) (*ProblemInfo, error) {
 		return nil, err
 	}
 
-	return &ProblemInfo{
+	p := &ProblemInfo{
 		Name:       chalData.Spec.Name,
 		Difficulty: difficulty,
 		Order:      chalData.Spec.Order,
 		Points:     flagData.Spec.Point,
-	}, nil
+	}
+	if err := p.Validate(); err != nil {
+		// TODO: OrderとPointsの対応関係が取れていない場合は、Pointsを元にOrderを上書きする
+		// 上書きするとフォーマットが変わりそうで嫌な気もする
+		// ひとまずロギングで対処
+		fmt.Fprintf(l.Stderr, "order of %s/.lmtd/challenge.yaml should be %d, but got %d\n", targetPath, p.Points/10, p.Order)
+		p.Order = p.Points / 10
+
+		// buf, err := yaml.Marshal(p)
+		// if err != nil {
+		// 	return p, fmt.Errorf("failed yaml.Marshal: data(%v): %s", *p, err.Error())
+		// }
+	}
+
+	return p, nil
 }
 
 // O(len(tags) * len(difficulties))だが、
