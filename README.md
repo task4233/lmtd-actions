@@ -1,21 +1,21 @@
-# lmtd-cheker
-lmtd-chekerはlmtd用repositoryにおける各ジャンルの情報をまとめてmarkdownに書き出すツールです。
+# lmtd-checker
+lmtd-checkerはlmtd用repositoryにおける各ジャンルの情報をまとめてmarkdownに書き出すツールです。
 
 ## Installation
 ```bash
-go install github.com/task4233/lmtd-cheker/cmd/lmtd-cheker@latest
+go install github.com/task4233/lmtd-checker/cmd/lmtd-checker@latest
 ```
 
 ## Usage
 ```bash
-lmtd-cheker <target dir>
+lmtd-checker <target dir>
 ```
 
 ## Example
 2022_beginners_ctf
 
 ```bash
-$ lmtd-cheker 2022_beginnersctf_ctf
+$ lmtd-checker 2022_beginnersctf_ctf
 $ cat web/README.md
 ## web
 

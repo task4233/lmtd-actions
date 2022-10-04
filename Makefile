@@ -1,8 +1,8 @@
 build:
-	go build -o lmtd-cheker ./cmd/lmtd-cheker/main.go
+	go build -o lmtd-checker ./cmd/lmtd-checker/main.go
 
 run:
-	go run cmd/lmtd-cheker/main.go
+	go run cmd/lmtd-checker/main.go
 
 test:
 	go test -race -shuffle=on -v ./...

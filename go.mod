@@ -1,4 +1,4 @@
-module github.com/task4233/lmtd-cheker
+module github.com/task4233/lmtd-checker
 
 go 1.17
 

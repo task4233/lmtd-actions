@@ -19,7 +19,7 @@ type LMTd struct {
 
 func (l LMTd) Run(ctx context.Context, version string, args []string) error {
 	if len(args) == 0 {
-		return errors.New("lmtd-cheker <target directory path>")
+		return errors.New("lmtd-checker <target directory path>")
 	}
 	targetDir := args[0]
 	genres, err := os.ReadDir(targetDir)
