@@ -1,7 +1,6 @@
 package lmtd
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -9,7 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"text/template"
 
 	"gopkg.in/yaml.v3"
 )
@@ -89,57 +87,6 @@ func (l LMTd) Run(ctx context.Context, version string, args []string) error {
 	return nil
 }
 
-type Difficulty string
-
-var difficulties = []Difficulty{
-	"beginner",
-	"easy",
-	"medium",
-	"hard",
-}
-
-// TODO: ChallengeとFlagのownerChallengeUniqueKeyが一致していることを確認する
-type Challenge struct {
-	ApiVersion string `yaml:"apiVersion"`
-	Kind       string `yaml:"kind"`
-	Spec       struct {
-		Name  string   `yaml:"name"`
-		Order int      `yaml:"order"`
-		Tags  []string `yaml:"tags"`
-	} `yaml:"spec"`
-	// TODO: https://github.com/SECCON/beginners-lecture-ctf/blob/main/misc/addition_master/.lmtd/challenge.yaml
-}
-
-type Flag struct {
-	ApiVersion string `yaml:"apiVersion"`
-	Spec       struct {
-		Point int `yaml:"point"`
-	} `yaml:"spec"`
-	// TOOD: https://github.com/SECCON/beginners-lecture-ctf/blob/main/misc/addition_master/.lmtd/flag.yaml
-}
-
-// ProblemInfo は各問題の情報を保持
-type ProblemInfo struct {
-	Name       string
-	Difficulty Difficulty
-	Order      int
-	Points     int
-}
-
-func (p *ProblemInfo) Validate() error {
-	if p.Points/10 != p.Order {
-		return fmt.Errorf("points(%d) should be one-tenth of order(%d)", p.Points, p.Order)
-	}
-
-	return nil
-}
-
-// GenreInfo は各ジャンルの情報を保持
-type GenreInfo struct {
-	Name         string
-	ProblemInfos []ProblemInfo
-}
-
 func (l LMTd) extractInfo(targetPath string) (*ProblemInfo, error) {
 	lmtdDir := filepath.Join(targetPath, ".lmtd")
 
@@ -202,26 +149,6 @@ func (l LMTd) extractDifficulty(tags []string) Difficulty {
 
 	// difficultyが空の可能性があるのでerrorは返さない
 	return ""
-}
-
-func (l LMTd) generateMarkdown(genreInfo GenreInfo) (string, error) {
-	// 追加で表示したい情報が増える可能性がありそうなので、複数ファイル指定可能にしておく
-	tpl, err := template.ParseFiles([]string{"templates/genreInfo.md.tpl"}...)
-	if err != nil {
-		return "", err
-	}
-
-	writer := &bytes.Buffer{}
-	err = tpl.Execute(writer, struct {
-		GenreInfo GenreInfo
-	}{
-		GenreInfo: genreInfo,
-	})
-	if err != nil {
-		return "", err
-	}
-
-	return writer.String(), nil
 }
 
 func (l LMTd) appendInfo(markdown string, outputPath string) error {

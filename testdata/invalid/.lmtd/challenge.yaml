@@ -3,7 +3,7 @@ apiVersion: dummyApiVersion
 kind: Challenge
 spec:
   name: test
-  order: 10
+  order: 55
   tags:
     - author:task4233
     - beginner

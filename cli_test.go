@@ -1,6 +1,7 @@
 package lmtd
 
 import (
+	"bytes"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -64,14 +65,22 @@ func TestExtractInfo(t *testing.T) {
 			wantInfo: &ProblemInfo{
 				Name:       "test",
 				Difficulty: "beginner",
-				Order:      55,
+				Order:      10,
 				Points:     100,
 			},
 			wantError: false,
 		},
+		"got correctly if order is not set correctly": {
+			targetPath: "./testdata/invalid",
+			wantInfo: &ProblemInfo{
+				Name:       "test",
+				Difficulty: "beginner",
+				Order:      10,
+				Points:     100,
+			},
+			wantError: true,
+		},
 	}
-
-	lmtd := LMTd{}
 
 	for name, tt := range tests {
 		tt := tt
@@ -79,13 +88,16 @@ func TestExtractInfo(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			gotInfo, err := lmtd.extractInfo(tt.targetPath)
-			if (err != nil) != tt.wantError {
-				t.Fatalf("unexpected error: %v", err)
+			stderrBuf := &bytes.Buffer{}
+			lmtd := LMTd{Stderr: stderrBuf}
+			gotInfo, _ := lmtd.extractInfo(tt.targetPath)
+			if (stderrBuf.Len() > 0) != tt.wantError {
+				t.Fatalf("unexpected error: %v", stderrBuf.String())
 			}
 			if diff := cmp.Diff(tt.wantInfo, gotInfo); diff != "" {
 				t.Errorf("extractInfo (-want +got) =\n%s\n", diff)
 			}
+
 		})
 	}
 
