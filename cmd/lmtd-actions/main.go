@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/task4233/lmtd-actions"
+	"github.com/task4233/lmtd-cheker"
 )
 
 // build時のldflagsでembed
-// -ldflags "-X github.com/task4233/lmtd-actions/cmd/lmtd-actions/main.version={version}"
+// -ldflags "-X github.com/task4233/lmtd-cheker/cmd/lmtd-cheker/main.version={version}"
 var version string
 
 func main() {

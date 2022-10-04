@@ -1,21 +1,21 @@
-# lmtd-actions
-lmtd-actionsはlmtd用repositoryにおける各ジャンルの情報をまとめてmarkdownに書き出すツールです。
+# lmtd-cheker
+lmtd-chekerはlmtd用repositoryにおける各ジャンルの情報をまとめてmarkdownに書き出すツールです。
 
 ## Installation
 ```bash
-go install github.com/task4233/lmtd-actions/cmd/lmtd-actions@latest
+go install github.com/task4233/lmtd-cheker/cmd/lmtd-cheker@latest
 ```
 
 ## Usage
 ```bash
-lmtd-actions <target dir>
+lmtd-cheker <target dir>
 ```
 
 ## Example
 2022_beginners_ctf
 
 ```bash
-$ lmtd-actions 2022_beginnersctf_ctf
+$ lmtd-cheker 2022_beginnersctf_ctf
 $ cat web/README.md
 ## web
 
