@@ -16,14 +16,15 @@ lmtd-checker <target dir>
 
 ```bash
 $ lmtd-checker 2022_beginnersctf_ctf
+(snip)
 $ cat web/README.md
 ## web
 
 |問題名|難易度|order|points|
 |:-:|:-:|:-:|:-:|
-|gallery|easy|2|500|
-|Ironhand|medium|3|500|
-|serial|medium|3|500|
-|textex|easy|2|500|
-|Util|beginner|1|500|
+|gallery|easy|50|500|
+|Ironhand|medium|50|500|
+|serial|medium|50|500|
+|textex|easy|50|500|
+|Util|beginner|50|500|
 ```
